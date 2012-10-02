@@ -4,10 +4,40 @@ var
   complex_array_lib = require('../lib/complex_array'),
   ComplexArray = complex_array_lib.ComplexArray,
   isComplexArray = complex_array_lib.isComplexArray,
+  PI = Math.PI,
   EPSILON = 1e-5,
   SQRT2 = Math.SQRT2,
   SQRT1_2 = Math.SQRT1_2,
+  cos = Math.cos,
+  sin = Math.sin,
+  sqrt = Math.sqrt,
   random = Math.random
+
+function DFT(input) {
+  var
+    n = input.length,
+    amplitude = 1 / sqrt(n),
+    output = new ComplexArray(input),
+    phase = {real: 0, imag: 0},
+    delta = {real: 0, imag: 0},
+    _swap
+
+  return output.map(function(out_value, i) {
+    out_value.real = 0, out_value.imag = 0
+    phase.real = 1, phase.imag = 0
+    delta.real = cos(2*PI*i/n), delta.imag = sin(2*PI*i/n)
+
+    input.forEach(function(in_value, j) {
+      out_value.real += phase.real * in_value.real - phase.imag * in_value.imag
+      out_value.imag += phase.real * in_value.imag + phase.imag * in_value.real
+      _swap = phase.real
+      phase.real = phase.real * delta.real - phase.imag * delta.imag
+      phase.imag = _swap * delta.imag + phase.imag * delta.real
+    })
+    out_value.real *= amplitude
+    out_value.imag *= amplitude
+  })
+}
 
 function assertApproximatelyEqual(first, second, message) {
   var delta = Math.abs(first - second)
@@ -38,22 +68,14 @@ function assertFFTMatches(original, expected) {
       new ComplexArray(original), fft_lib.InvFFT(transformed))
 }
 
+function assertFFTMatchesDFT(input) {
+  input = new ComplexArray(input)
+
+  assertComplexArraysAlmostEqual(DFT(input), fft_lib.FFT(input))
+}
+
 describe('fft', function() {
   describe('#FFT()', function() {
-    describe('on N=2 Arrays', function() {
-      it('should return a single frequency given a constant array', function() {
-        assertFFTMatches([1, 1], new ComplexArray([SQRT2, 0]))
-      })
-
-      it('should return flat with a delta function input', function() {
-        assertFFTMatches([1, 0], new ComplexArray([SQRT1_2, SQRT1_2]))
-      })
-
-      it('should return a single negative freq', function() {
-        assertFFTMatches([-1, 1], new ComplexArray([0, -SQRT2]))
-      })
-    })
-
     describe('on N=3 Arrays', function() {
       it('should throw an error', function() {
         assert.throws(function(){fft_lib.FFT([1, 1, 1])}, Error)
@@ -82,38 +104,16 @@ describe('fft', function() {
       })
     })
 
-    describe('on N=8 Arrays', function() {
-      it('should return a single frequency given a constant array', function() {
-        assertFFTMatches([1, 1, 1, 1, 1, 1, 1, 1],
-          new ComplexArray([2*SQRT2, 0, 0, 0, 0, 0, 0, 0]))
-      })
-
-      it('should return a single high freq', function() {
-        assertFFTMatches([1, -1, 1, -1, 1, -1, 1, -1],
-          new ComplexArray([0, 0, 0, 0, 2*SQRT2, 0, 0, 0]))
-      })
-
-      it('should return a single low freq', function() {
-        var cos_pi_4 = Math.cos(Math.PI/4)
-
-        assertFFTMatches(
-          [1, cos_pi_4, 0, -cos_pi_4, -1, -cos_pi_4, 0, cos_pi_4],
-          new ComplexArray([0, SQRT2, 0, 0, 0, 0, 0, SQRT2]))
-      })
-    })
-
     describe('on N=512 Arrays', function() {
       it('should return the same array after InvFFT.FFT', function() {
-        var
-          a = [],
-          i
+        var a = new ComplexArray(512)
 
-        for(i = 0; i < 512; i++) {
-          a[i] = random()
-        }
+        a.map(function(value) {
+          value.real = random()
+          value.imag = random()
+        })
 
-        assertComplexArraysAlmostEqual(
-          new ComplexArray(a), fft_lib.InvFFT(fft_lib.FFT(a)))
+        assertFFTMatchesDFT(a)
       })
     })
   })
