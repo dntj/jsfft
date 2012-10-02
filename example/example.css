@@ -1,0 +1,26 @@
+body {
+  font-family: sans-serif;
+}
+
+canvas {
+  background-color: #eee;
+}
+
+div.panel {
+  width: 256px;
+  height: 256px;
+  border: 1px solid #ccc;
+  padding: 2px;
+  float: left;
+}
+
+div.explanation {
+  width: 100%;
+  height: 50%;
+  padding: 2px;
+  overflow: scroll;
+}
+
+pre, code {
+  font-size: 85%;
+}

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="../lib/complex_array.js"></script>
+  <script src="../lib/fft.js"></script>
+  <link rel="stylesheet" href="example.css">
+  <title></title>
+</head>
+<body>
+  <div id="original" class="panel">
+    <div class="explanation">
+      Sample data
+    </div>
+  </div>
+  <div id="fft" class="panel">
+    <div class="explanation">
+      Transformed:<br>
+      <code>
+        fft_data = fft.FFT(data)
+      </code>
+    </div>
+  </div>
+  <div id="fft_filtered" class="panel">
+    <div class="explanation">
+      Simple low pass filter:
+      <pre>
+fft_data.map(function(c_value, i, n) {
+  if (i > n/5 &amp;&amp; i &lt; 4*n/5) {
+    c_value.real = 0
+    c_value.imag = 0
+  }
+})
+      </pre>
+    </div>
+  </div>
+  <div id="original_filtered" class="panel">
+    <div class="explanation">
+      Transformed back:<br>
+      <code>
+        fft.InvFFT(fft_data)
+      </code>
+    </div>
+  </div>
+  <div id="all_in_one" class="panel">
+    <div class="explanation">
+      ... or all in one step
+      <pre>
+fft.Filter(data, function(c_value, i, n) {
+  if (i > n/5 &amp;&amp; i &lt; 4*n/5) {
+    c_value.real = 0
+    c_value.imag = 0
+  }
+})
+      </pre>
+    </div>
+  </div>
+  <script>
+    !function() {
+      function drawToCanvas(element_id, data) {
+        var
+          element = document.getElementById(element_id)
+          canvas = document.createElement('canvas'),
+          context = canvas.getContext('2d'),
+          width = element.clientWidth,
+          height = element.clientHeight/2,
+          n = data.length
+
+        canvas.width = width
+        canvas.height = height
+        element.insertBefore(canvas, element.children[0])
+
+        context.strokeStyle = 'blue'
+        context.beginPath()
+        data.forEach(function(c_value, i) {
+          context.lineTo(
+            i * width / n,
+            height/2 * (1.5 - c_value.real)
+          )
+        })
+        context.stroke()
+      }
+
+      window.onload = function() {
+        var
+          data = new complex_array.ComplexArray(128),
+          fft_data
+
+        data.map(function(value, i, n) {
+          value.real = (i > n/3 && i < 2*n/3) ? 1 : 0
+        })
+
+        drawToCanvas('original', data)
+
+        fft_data = fft.FFT(data)
+        drawToCanvas('fft', fft_data)
+        fft_data.map(function(c_value, i, n) {
+          if (i > n/5 && i < 4*n/5) {
+            c_value.real = 0
+            c_value.imag = 0
+          }
+        })
+        drawToCanvas('fft_filtered', fft_data)
+        drawToCanvas('original_filtered', fft.InvFFT(fft_data))
+
+        drawToCanvas('all_in_one', fft.Filter(data, function(c_value, i, n) {
+          if (i > n/5 && i < 4*n/5) {
+            c_value.real = 0
+            c_value.imag = 0
+          }
+        }))
+      }
+    }()
+  </script>
+</body>
+</html>
