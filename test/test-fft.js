@@ -120,40 +120,49 @@ describe('fft', function() {
 
   describe('#FrequencyMap()', function() {
     it('should not modify the original', function() {
-      var filtered = fft_lib.FrequencyMap([1, 2, 3, 4], function() {})
+      var
+        original = new ComplexArray([1, 2, 3, 4]),
+        filtered = original.frequencyMap(function() {})
 
-      assertComplexArraysAlmostEqual(new ComplexArray([1, 2, 3, 4]), filtered)
+      assertComplexArraysAlmostEqual(original, filtered)
     })
 
     it('should halve the original', function() {
-      var filtered = fft_lib.FrequencyMap([1, 2, 3, 4], function(value, i) {
-        value.real /= 2
-        value.imag /= 2
-      })
+      var
+        original = new ComplexArray([1, 2, 3, 4]),
+        filtered = original.frequencyMap(function(value, i) {
+          value.real /= 2
+          value.imag /= 2
+        })
 
-      assertComplexArraysAlmostEqual(new ComplexArray([0.5, 1, 1.5, 2]), filtered)
+      assertComplexArraysAlmostEqual(
+          new ComplexArray([0.5, 1, 1.5, 2]), filtered)
     })
 
     it('should return zeroed ComplexArray', function() {
-      var filtered = fft_lib.FrequencyMap([1, 2, 3, 4], function(value, i) {
-        value.real = value.imag = 0
-      })
+      var
+        original = new ComplexArray([1, 2, 3, 4]),
+        filtered = original.frequencyMap(function(value, i) {
+          value.real = value.imag = 0
+        })
 
       assertComplexArraysAlmostEqual(new ComplexArray([0, 0, 0, 0]), filtered)
     })
 
     it('should shift the original', function() {
-      var filtered = fft_lib.FrequencyMap([1, 2, 3, 4], function(value, i) {
-        var
-          // Multiply by a phase to shift the original.
-          real_multiplier = i % 2 ? 0 : (1 - i),
-          imag_multiplier = i % 2 ? (2 - i) : 0,
-          swap_real = value.real,
-          swap_imag = value.imag
+      var
+        original = new ComplexArray([1, 2, 3, 4]),
+        filtered = original.frequencyMap(function(value, i) {
+          var
+            // Multiply by a phase to shift the original.
+            real_multiplier = i % 2 ? 0 : (1 - i),
+            imag_multiplier = i % 2 ? (2 - i) : 0,
+            swap_real = value.real,
+            swap_imag = value.imag
 
-        value.real = real_multiplier * swap_real - imag_multiplier * swap_imag
-        value.imag = real_multiplier * swap_imag + imag_multiplier * swap_real
-      })
+          value.real = real_multiplier * swap_real - imag_multiplier * swap_imag
+          value.imag = real_multiplier * swap_imag + imag_multiplier * swap_real
+        })
 
       assertComplexArraysAlmostEqual(new ComplexArray([4, 1, 2, 3]), filtered)
     })

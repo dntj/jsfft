@@ -52,7 +52,7 @@ fft_data.map(function(c_value, i, n) {
     <div class="explanation">
       ... or all in one step
       <pre>
-fft.FrequencyMap(data, function(c_value, i, n) {
+data.frequencyMap(function(c_value, i, n) {
   if (i > n/5 &amp;&amp; i &lt; 4*n/5) {
     c_value.real = 0
     c_value.imag = 0
@@ -109,7 +109,7 @@ fft.FrequencyMap(data, function(c_value, i, n) {
         drawToCanvas('fft_filtered', fft_data)
         drawToCanvas('original_filtered', fft.InvFFT(fft_data))
 
-        drawToCanvas('all_in_one', fft.FrequencyMap(data, function(c_value, i, n) {
+        drawToCanvas('all_in_one', data.frequencyMap(function(c_value, i, n) {
           if (i > n/5 && i < 4*n/5) {
             c_value.real = 0
             c_value.imag = 0
