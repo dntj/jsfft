@@ -11,6 +11,12 @@
   <div id="original" class="panel">
     <div class="explanation">
       Sample data
+      <pre>
+var data = new ComplexArray(128)
+data.map(function(value, i, n) {
+  value.real = (i > n/3 &amp;&amp; i &lt; 2*n/3) ? 1 : 0
+})
+      </pre>
     </div>
   </div>
   <div id="fft" class="panel">
