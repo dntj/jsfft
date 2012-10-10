@@ -8,7 +8,8 @@
   <title></title>
 </head>
 <body>
-  <div id="original" class="panel">
+  <div class="panel">
+    <div id="original" class="example"></div>
     <div class="explanation">
       Sample data
       <pre>
@@ -19,43 +20,47 @@ data.map(function(value, i, n) {
       </pre>
     </div>
   </div>
-  <div id="fft" class="panel">
+  <div class="panel">
+    <div id="fft" class="example"></div>
     <div class="explanation">
       Transformed:<br>
       <code>
-        fft_data = fft.FFT(data)
+        fft_data = data.FFT()
       </code>
     </div>
   </div>
-  <div id="fft_filtered" class="panel">
+  <div  class="panel">
+    <div id="fft_filtered" class="example"></div>
     <div class="explanation">
       Simple low pass filter:
       <pre>
-fft_data.map(function(c_value, i, n) {
+fft_data.map(function(freq, i, n) {
   if (i > n/5 &amp;&amp; i &lt; 4*n/5) {
-    c_value.real = 0
-    c_value.imag = 0
+    freq.real = 0
+    freq.imag = 0
   }
 })
       </pre>
     </div>
   </div>
-  <div id="original_filtered" class="panel">
+  <div class="panel">
+    <div id="original_filtered" class="example"></div>
     <div class="explanation">
       Transformed back:<br>
       <code>
-        fft.InvFFT(fft_data)
+        fft_data.InvFFT()
       </code>
     </div>
   </div>
-  <div id="all_in_one" class="panel">
+  <div class="panel">
+    <div id="all_in_one" class="example"></div>
     <div class="explanation">
       ... or all in one step
       <pre>
-data.frequencyMap(function(c_value, i, n) {
+data.frequencyMap(function(freq, i, n) {
   if (i > n/5 &amp;&amp; i &lt; 4*n/5) {
-    c_value.real = 0
-    c_value.imag = 0
+    freq.real = 0
+    freq.imag = 0
   }
 })
       </pre>
@@ -69,12 +74,12 @@ data.frequencyMap(function(c_value, i, n) {
           canvas = document.createElement('canvas'),
           context = canvas.getContext('2d'),
           width = element.clientWidth,
-          height = element.clientHeight/2,
+          height = element.clientHeight,
           n = data.length
 
         canvas.width = width
         canvas.height = height
-        element.insertBefore(canvas, element.children[0])
+        element.appendChild(canvas)
 
         context.strokeStyle = 'blue'
         context.beginPath()
@@ -98,21 +103,21 @@ data.frequencyMap(function(c_value, i, n) {
 
         drawToCanvas('original', data)
 
-        fft_data = fft.FFT(data)
+        fft_data = data.FFT()
         drawToCanvas('fft', fft_data)
-        fft_data.map(function(c_value, i, n) {
+        fft_data.map(function(freq, i, n) {
           if (i > n/5 && i < 4*n/5) {
-            c_value.real = 0
-            c_value.imag = 0
+            freq.real = 0
+            freq.imag = 0
           }
         })
         drawToCanvas('fft_filtered', fft_data)
-        drawToCanvas('original_filtered', fft.InvFFT(fft_data))
+        drawToCanvas('original_filtered', fft_data.InvFFT())
 
-        drawToCanvas('all_in_one', data.frequencyMap(function(c_value, i, n) {
+        drawToCanvas('all_in_one', data.frequencyMap(function(freq, i, n) {
           if (i > n/5 && i < 4*n/5) {
-            c_value.real = 0
-            c_value.imag = 0
+            freq.real = 0
+            freq.imag = 0
           }
         }))
       }
