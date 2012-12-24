@@ -18,7 +18,7 @@ Including the **fft** module attaches FFT methods to ComplexArray:
 
 ```javascript
 var frequencies = data.FFT()
-// Implement a low-pass filter using the in-place mapper
+// Implement a low-pass filter using the in-place mapper.
 frequencies.map(function(frequency, i, n) {
   if (i > n/5 && i < 4*n/5) {
     frequency.real = 0
@@ -30,7 +30,7 @@ frequencies.map(function(frequency, i, n) {
 Alternatively, frequency-space filters can be implemented via the frequencyMap:
 
 ```javascript
-data.frequencyMap(function(frequency, i, n) {
+var filtered = data.frequencyMap(function(frequency, i, n) {
   if (i > n/5 && i < 4*n/5) {
     frequency.real = 0
     frequency.imag = 0
