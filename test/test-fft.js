@@ -76,12 +76,6 @@ function assertFFTMatchesDFT(input) {
 
 describe('fft', function() {
   describe('#FFT()', function() {
-    describe('on N=3 Arrays', function() {
-      it('should throw an error', function() {
-        assert.throws(function(){fft_lib.FFT([1, 1, 1])}, Error)
-      })
-    })
-
     describe('on N=4 Arrays', function() {
       it('should return a single frequency given a constant array', function() {
         assertFFTMatches([1, 1, 1, 1], new ComplexArray([2, 0, 0, 0]))
@@ -104,9 +98,52 @@ describe('fft', function() {
       })
     })
 
+    describe('on N=6 Arrays', function() {
+      it('should return a single frequency given a constant array', function() {
+        assertFFTMatches(
+          [1, 1, 1, 1, 1, 1],
+          new ComplexArray([sqrt(6), 0, 0, 0, 0, 0])
+        )
+      })
+
+      it('should return flat with a delta function input', function() {
+        var a = 1 / sqrt(6)
+        assertFFTMatches(
+          [1, 0, 0, 0, 0, 0],
+          new ComplexArray([a, a, a, a, a, a])
+        )
+      })
+    })
+
+    describe('on N=`prime` Arrays', function() {
+      it('should match the DFT', function() {
+        var a = new ComplexArray(13)
+
+        a.map(function(value) {
+          value.real = random()
+          value.imag = random()
+        })
+
+        assertFFTMatchesDFT(a)
+      })
+    })
+
     describe('on N=512 Arrays', function() {
-      it('should return the same array after InvFFT.FFT', function() {
+      it('should match the DFT', function() {
         var a = new ComplexArray(512)
+
+        a.map(function(value) {
+          value.real = random()
+          value.imag = random()
+        })
+
+        assertFFTMatchesDFT(a)
+      })
+    })
+
+    describe('on N=900 Arrays', function() {
+      it('should match the DFT', function() {
+        var a = new ComplexArray(900)
 
         a.map(function(value) {
           value.real = random()
@@ -118,7 +155,7 @@ describe('fft', function() {
     })
   })
 
-  describe('#FrequencyMap()', function() {
+  describe('#frequencyMap()', function() {
     it('should not modify the original', function() {
       var
         original = new ComplexArray([1, 2, 3, 4]),
