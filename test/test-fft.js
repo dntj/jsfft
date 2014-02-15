@@ -20,23 +20,26 @@ function DFT(input) {
     output = new ComplexArray(input),
     phase = {real: 0, imag: 0},
     delta = {real: 0, imag: 0},
+    i, j,
     _swap
 
-  return output.map(function(out_value, i) {
-    out_value.real = 0, out_value.imag = 0
+  for(i = 0; i < n; i++) {
+    output.real[i] = 0, output.imag[i] = 0
     phase.real = 1, phase.imag = 0
     delta.real = cos(2*PI*i/n), delta.imag = sin(2*PI*i/n)
 
-    input.forEach(function(in_value, j) {
-      out_value.real += phase.real * in_value.real - phase.imag * in_value.imag
-      out_value.imag += phase.real * in_value.imag + phase.imag * in_value.real
+    for(j = 0; j < n; j++) {
+      output.real[i] += phase.real * input.real[j] - phase.imag * input.imag[j]
+      output.imag[i] += phase.real * input.imag[j] + phase.imag * input.real[j]
       _swap = phase.real
       phase.real = phase.real * delta.real - phase.imag * delta.imag
       phase.imag = _swap * delta.imag + phase.imag * delta.real
-    })
-    out_value.real *= amplitude
-    out_value.imag *= amplitude
-  })
+    }
+    output.real[i] *= amplitude
+    output.imag[i] *= amplitude
+  }
+
+  return output
 }
 
 function assertApproximatelyEqual(first, second, message) {
