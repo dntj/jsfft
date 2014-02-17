@@ -1,0 +1,84 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Jsfft by dntj</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>Jsfft</h1>
+        <p>Small, efficient Javascript FFT implementation</p>
+
+        <p class="view"><a href="https://github.com/dntj/jsfft">View the Project on GitHub <small>dntj/jsfft</small></a></p>
+
+
+        <ul>
+          <li><a href="https://github.com/dntj/jsfft/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/dntj/jsfft/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/dntj/jsfft">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <h1>
+<a name="jsfft" class="anchor" href="#jsfft"><span class="octicon octicon-link"></span></a>jsfft</h1>
+
+<p>Small, efficient Javascript FFT implementation for node or the browser.</p>
+
+<h2>
+<a name="usage" class="anchor" href="#usage"><span class="octicon octicon-link"></span></a>Usage</h2>
+
+<p>JSFFT ships with a <strong>complex_array</strong> and a <strong>fft</strong> module.</p>
+
+<div class="highlight highlight-javascript"><pre><span class="kd">var</span> <span class="nx">data</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">complex_array</span><span class="p">.</span><span class="nx">ComplexArray</span><span class="p">(</span><span class="mi">512</span><span class="p">)</span>
+<span class="c1">// Use the in-place mapper to populate the data.</span>
+<span class="nx">data</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">value</span><span class="p">,</span> <span class="nx">i</span><span class="p">,</span> <span class="nx">n</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">value</span><span class="p">.</span><span class="nx">real</span> <span class="o">=</span> <span class="p">(</span><span class="nx">i</span> <span class="o">&gt;</span> <span class="nx">n</span><span class="o">/</span><span class="mi">3</span> <span class="o">&amp;&amp;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="o">*</span><span class="nx">n</span><span class="o">/</span><span class="mi">3</span><span class="p">)</span> <span class="o">?</span> <span class="mi">1</span> <span class="o">:</span> <span class="mi">0</span>
+<span class="p">})</span>
+</pre></div>
+
+<p>Including the <strong>fft</strong> module attaches FFT methods to ComplexArray:</p>
+
+<div class="highlight highlight-javascript"><pre><span class="kd">var</span> <span class="nx">frequencies</span> <span class="o">=</span> <span class="nx">data</span><span class="p">.</span><span class="nx">FFT</span><span class="p">()</span>
+<span class="c1">// Implement a low-pass filter using the in-place mapper.</span>
+<span class="nx">frequencies</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">frequency</span><span class="p">,</span> <span class="nx">i</span><span class="p">,</span> <span class="nx">n</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">i</span> <span class="o">&gt;</span> <span class="nx">n</span><span class="o">/</span><span class="mi">5</span> <span class="o">&amp;&amp;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="o">*</span><span class="nx">n</span><span class="o">/</span><span class="mi">5</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">frequency</span><span class="p">.</span><span class="nx">real</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="nx">frequency</span><span class="p">.</span><span class="nx">imag</span> <span class="o">=</span> <span class="mi">0</span>
+  <span class="p">}</span>
+<span class="p">})</span>
+</pre></div>
+
+<p>Alternatively, frequency-space filters can be implemented via the frequencyMap:</p>
+
+<div class="highlight highlight-javascript"><pre><span class="kd">var</span> <span class="nx">filtered</span> <span class="o">=</span> <span class="nx">data</span><span class="p">.</span><span class="nx">frequencyMap</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">frequency</span><span class="p">,</span> <span class="nx">i</span><span class="p">,</span> <span class="nx">n</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">i</span> <span class="o">&gt;</span> <span class="nx">n</span><span class="o">/</span><span class="mi">5</span> <span class="o">&amp;&amp;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="o">*</span><span class="nx">n</span><span class="o">/</span><span class="mi">5</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">frequency</span><span class="p">.</span><span class="nx">real</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="nx">frequency</span><span class="p">.</span><span class="nx">imag</span> <span class="o">=</span> <span class="mi">0</span>
+  <span class="p">}</span>
+<span class="p">})</span>
+</pre></div>
+
+<h2>
+<a name="other-implementations" class="anchor" href="#other-implementations"><span class="octicon octicon-link"></span></a>Other Implementations</h2>
+
+<p><a href="https://github.com/corbanbrook/dsp.js">DSP</a> is a full featured Digital Signal
+Processing library in JS which includes a JS FFT implementation.</p>
+      </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/dntj">dntj</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="javascripts/scale.fix.js"></script>
+    
+  </body>
+</html>
