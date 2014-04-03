@@ -1,81 +1,6 @@
-var
-  assert = require('assert'),
-  fft_lib = require('../lib/fft'),
-  complex_array_lib = require('../lib/complex_array'),
-  ComplexArray = complex_array_lib.ComplexArray,
-  isComplexArray = complex_array_lib.isComplexArray,
-  PI = Math.PI,
-  EPSILON = 1e-5,
-  SQRT2 = Math.SQRT2,
-  SQRT1_2 = Math.SQRT1_2,
-  cos = Math.cos,
-  sin = Math.sin,
-  sqrt = Math.sqrt,
-  random = Math.random
+require('./test_helper')
 
-function DFT(input) {
-  var
-    n = input.length,
-    amplitude = 1 / sqrt(n),
-    output = new ComplexArray(input),
-    phase = {real: 0, imag: 0},
-    delta = {real: 0, imag: 0},
-    i, j,
-    _swap
-
-  for(i = 0; i < n; i++) {
-    output.real[i] = 0, output.imag[i] = 0
-    phase.real = 1, phase.imag = 0
-    delta.real = cos(2*PI*i/n), delta.imag = sin(2*PI*i/n)
-
-    for(j = 0; j < n; j++) {
-      output.real[i] += phase.real * input.real[j] - phase.imag * input.imag[j]
-      output.imag[i] += phase.real * input.imag[j] + phase.imag * input.real[j]
-      _swap = phase.real
-      phase.real = phase.real * delta.real - phase.imag * delta.imag
-      phase.imag = _swap * delta.imag + phase.imag * delta.real
-    }
-    output.real[i] *= amplitude
-    output.imag[i] *= amplitude
-  }
-
-  return output
-}
-
-function assertApproximatelyEqual(first, second, message) {
-  var delta = Math.abs(first - second)
-  assert.ok(delta < EPSILON, message)
-}
-
-function assertComplexArraysAlmostEqual(first, second) {
-  var message = second + ' != ' + first
-
-  assert.equal(first.length, second.length, message)
-
-  first.forEach(function(value, i) {
-    assertApproximatelyEqual(value.real, second.real[i], message)
-    assertApproximatelyEqual(value.imag, second.imag[i], message)
-  })
-}
-
-function assertFFTMatches(original, expected) {
-  var transformed
-
-  if (!isComplexArray(expected)) {
-    throw TypeError('expected match should be a ComplexArray')
-  }
-
-  transformed = fft_lib.FFT(original)
-  assertComplexArraysAlmostEqual(expected, transformed)
-  assertComplexArraysAlmostEqual(
-      new ComplexArray(original), fft_lib.InvFFT(transformed))
-}
-
-function assertFFTMatchesDFT(input) {
-  input = new ComplexArray(input)
-
-  assertComplexArraysAlmostEqual(DFT(input), fft_lib.FFT(input))
-}
+var ComplexArray = require('../lib/complex_array').ComplexArray
 
 describe('fft', function() {
   describe('#FFT()', function() {
@@ -105,12 +30,12 @@ describe('fft', function() {
       it('should return a single frequency given a constant array', function() {
         assertFFTMatches(
           [1, 1, 1, 1, 1, 1],
-          new ComplexArray([sqrt(6), 0, 0, 0, 0, 0])
+          new ComplexArray([Math.sqrt(6), 0, 0, 0, 0, 0])
         )
       })
 
       it('should return flat with a delta function input', function() {
-        var a = 1 / sqrt(6)
+        var a = 1 / Math.sqrt(6)
         assertFFTMatches(
           [1, 0, 0, 0, 0, 0],
           new ComplexArray([a, a, a, a, a, a])
@@ -123,8 +48,8 @@ describe('fft', function() {
         var a = new ComplexArray(13)
 
         a.map(function(value) {
-          value.real = random()
-          value.imag = random()
+          value.real = Math.random()
+          value.imag = Math.random()
         })
 
         assertFFTMatchesDFT(a)
@@ -136,8 +61,8 @@ describe('fft', function() {
         var a = new ComplexArray(512)
 
         a.map(function(value) {
-          value.real = random()
-          value.imag = random()
+          value.real = Math.random()
+          value.imag = Math.random()
         })
 
         assertFFTMatchesDFT(a)
@@ -149,8 +74,8 @@ describe('fft', function() {
         var a = new ComplexArray(900)
 
         a.map(function(value) {
-          value.real = random()
-          value.imag = random()
+          value.real = Math.random()
+          value.imag = Math.random()
         })
 
         assertFFTMatchesDFT(a)
