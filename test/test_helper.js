@@ -1,6 +1,6 @@
 !function() {
 
-  var EPSILON = 1e-5,
+  var EPSILON = 1e-4,
       assert = require('assert'),
       complex_array_lib = require('../lib/complex_array'),
       fft_lib = require('../lib/fft'),
@@ -43,12 +43,7 @@
     assertComplexArraysAlmostEqual(DFT(input), fft_lib.FFT(input))
   }
 
-  function assertApproximatelyEqual(first, second, message) {
-    var delta = Math.abs(first - second)
-    assert.ok(delta < EPSILON, message)
-  }
-
-  function DFT(input) {
+  global.DFT = function(input) {
     var n = input.length,
         amplitude = 1 / sqrt(n),
         output = new ComplexArray(input),
@@ -56,6 +51,10 @@
         delta = {real: 0, imag: 0},
         i, j,
         _swap
+
+    if (!isComplexArray(input)) {
+      input = new ComplexArray(input)
+    }
 
     for(i = 0; i < n; i++) {
       output.real[i] = 0, output.imag[i] = 0
@@ -74,6 +73,11 @@
     }
 
     return output
+  }
+
+  function assertApproximatelyEqual(first, second, message) {
+    var delta = Math.abs(first - second)
+    assert.ok(delta < EPSILON, message)
   }
 
 }()
