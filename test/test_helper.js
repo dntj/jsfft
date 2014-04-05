@@ -25,16 +25,16 @@
   }
 
   global.assertFFTMatches = function(original, expected) {
-    var transformed
+    var transformed, copy
 
     if (!isComplexArray(expected)) {
       throw TypeError('expected match should be a ComplexArray')
     }
 
+    copy = new ComplexArray(original)
     transformed = fft_lib.FFT(original)
     assertComplexArraysAlmostEqual(expected, transformed)
-    assertComplexArraysAlmostEqual(
-        new ComplexArray(original), fft_lib.InvFFT(transformed))
+    assertComplexArraysAlmostEqual(copy, fft_lib.InvFFT(transformed))
   }
 
    global.assertFFTMatchesDFT = function(input) {

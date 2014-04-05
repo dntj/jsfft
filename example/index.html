@@ -23,9 +23,9 @@ data.map(function(value, i, n) {
   <div class="panel">
     <div id="fft" class="example"></div>
     <div class="explanation">
-      Transformed:<br>
+      Transform (in place):<br>
       <code>
-        fft_data = data.FFT()
+        data.FFT()
       </code>
     </div>
   </div>
@@ -34,7 +34,7 @@ data.map(function(value, i, n) {
     <div class="explanation">
       Simple low pass filter:
       <pre>
-fft_data.map(function(freq, i, n) {
+data.map(function(freq, i, n) {
   if (i > n/5 &amp;&amp; i &lt; 4*n/5) {
     freq.real = 0
     freq.imag = 0
@@ -46,9 +46,9 @@ fft_data.map(function(freq, i, n) {
   <div class="panel">
     <div id="original_filtered" class="example"></div>
     <div class="explanation">
-      Transformed back:<br>
+      Transform back:<br>
       <code>
-        fft_data.InvFFT()
+        data.InvFFT()
       </code>
     </div>
   </div>
@@ -94,8 +94,7 @@ data.frequencyMap(function(freq, i, n) {
 
       window.onload = function() {
         var
-          data = new complex_array.ComplexArray(128),
-          fft_data
+          data = new complex_array.ComplexArray(128)
 
         data.map(function(value, i, n) {
           value.real = (i > n/3 && i < 2*n/3) ? 1 : 0
@@ -103,16 +102,16 @@ data.frequencyMap(function(freq, i, n) {
 
         drawToCanvas('original', data)
 
-        fft_data = data.FFT()
-        drawToCanvas('fft', fft_data)
-        fft_data.map(function(freq, i, n) {
+        data.FFT()
+        drawToCanvas('fft', data)
+        data.map(function(freq, i, n) {
           if (i > n/5 && i < 4*n/5) {
             freq.real = 0
             freq.imag = 0
           }
         })
-        drawToCanvas('fft_filtered', fft_data)
-        drawToCanvas('original_filtered', fft_data.InvFFT())
+        drawToCanvas('fft_filtered', data)
+        drawToCanvas('original_filtered', data.InvFFT())
 
         drawToCanvas('all_in_one', data.frequencyMap(function(freq, i, n) {
           if (i > n/5 && i < 4*n/5) {

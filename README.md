@@ -14,7 +14,8 @@ data.map(function(value, i, n) {
 })
 ```
 
-Including the **fft** module attaches FFT methods to ComplexArray:
+Including the **fft** module attaches FFT methods to ComplexArray.  FFT and
+InvFFT perform in-place transforms on the underlying data:
 
 ```javascript
 var frequencies = data.FFT()
