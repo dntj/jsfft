@@ -1,5 +1,5 @@
 import * as assert from 'assert';
-import {ComplexArray, isComplexArray} from '../lib/complex_array';
+import {ComplexArray} from '../lib/complex_array';
 
 function assertArrayEquals(first, second) {
   const message = `${first} != ${second}`;
@@ -8,16 +8,6 @@ function assertArrayEquals(first, second) {
     assert.equal(item, second[i], message);
   });
 }
-
-describe('isComplexArray', () => {
-  it('should correctly identify complex arrays', () => {
-    assert.ok(!isComplexArray(1));
-    assert.ok(!isComplexArray([1,2,3]));
-    assert.ok(!isComplexArray('string'));
-
-    assert.ok(isComplexArray(new ComplexArray(1)));
-  });
-});
 
 describe('ComplexArray', () => {
   describe('#__constructor__()', () => {

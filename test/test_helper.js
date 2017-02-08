@@ -1,5 +1,5 @@
 import * as assert from 'assert';
-import {ComplexArray, isComplexArray} from '../lib/complex_array';
+import {ComplexArray} from '../lib/complex_array';
 import {FFT, InvFFT} from '../lib/fft';
 
 const EPSILON = 1e-4;
@@ -17,7 +17,7 @@ export function assertComplexArraysAlmostEqual(first, second) {
 }
 
 export function assertFFTMatches(original, expected) {
-  if (!isComplexArray(expected)) {
+  if (!(expected instanceof ComplexArray)) {
     throw TypeError('expected match should be a ComplexArray');
   }
 
@@ -37,7 +37,7 @@ export function DFT(input) {
   const n = input.length;
   const amplitude = 1 / Math.sqrt(n);
 
-  if (!isComplexArray(input)) {
+  if (!(input instanceof ComplexArray)) {
     input = new ComplexArray(input);
   }
   const output = new ComplexArray(input);
