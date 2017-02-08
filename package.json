@@ -13,9 +13,12 @@
   },
   "main": "./lib/fft",
   "scripts": {
-    "test": "mocha"
+    "test": "mocha --compilers js:babel-register"
   },
   "devDependencies": {
+    "babel-cli": "^6.22.2",
+    "babel-preset-env": "^1.1.8",
+    "babel-register": "^6.22.0",
     "mocha": ">=1.1.0"
   },
   "bugs": {

@@ -1,70 +1,68 @@
-require('../lib/fft_image')
-require('./test_helper')
+import '../lib/fft_image';
+import {assertComplexArraysAlmostEqual, DFT} from './test_helper';
+import * as assert from 'assert';
+import {FFTImageDataRGBA} from '../lib/fft';
+import {ComplexArray} from '../lib/complex_array';
 
-var assert = require('assert'),
-    fft_lib = require('../lib/fft'),
-    complex_array_lib = require('../lib/complex_array'),
-    ComplexArray = complex_array_lib.ComplexArray
 
 function randomImageData(n) {
-  var array = new Uint8ClampedArray(n),
-      i
+  const array = new Uint8ClampedArray(n);
 
-  for(i = 0; i < n; i++) {
-    array[i] = Math.random() * 128
+  for(let i = 0; i < n; i++) {
+    array[i] = Math.random() * 128;
   }
-  return array
+
+  return array;
 }
 
 function mergeRGBA(r, g, b, a) {
-  var n = r.length,
-      output = new Uint8ClampedArray(4 * n),
-      i
+  const n = r.length;
+  const output = new Uint8ClampedArray(4 * n);
 
-  for(i = 0; i < n; i++) {
-    output[4 * i    ] = r[i]
-    output[4 * i + 1] = g[i]
-    output[4 * i + 2] = b[i]
-    output[4 * i + 3] = a[i]
+  for(let i = 0; i < n; i++) {
+    output[4 * i    ] = r[i];
+    output[4 * i + 1] = g[i];
+    output[4 * i + 2] = b[i];
+    output[4 * i + 3] = a[i];
   }
-  return output
+
+  return output;
 }
 
 function mergeComplexRGBA(r, g, b, a) {
-  var n = r.length,
-      output = new ComplexArray(4 * n),
-      i
+  const n = r.length;
+  const output = new ComplexArray(4 * n);
 
-  for(i = 0; i < n; i++) {
-    output.real[4 * i    ] = r.real[i]
-    output.imag[4 * i    ] = r.imag[i]
-    output.real[4 * i + 1] = g.real[i]
-    output.imag[4 * i + 1] = g.imag[i]
-    output.real[4 * i + 2] = b.real[i]
-    output.imag[4 * i + 2] = b.imag[i]
-    output.real[4 * i + 3] = a.real[i]
-    output.imag[4 * i + 3] = a.imag[i]
+  for(let i = 0; i < n; i++) {
+    output.real[4 * i    ] = r.real[i];
+    output.imag[4 * i    ] = r.imag[i];
+    output.real[4 * i + 1] = g.real[i];
+    output.imag[4 * i + 1] = g.imag[i];
+    output.real[4 * i + 2] = b.real[i];
+    output.imag[4 * i + 2] = b.imag[i];
+    output.real[4 * i + 3] = a.real[i];
+    output.imag[4 * i + 3] = a.imag[i];
   }
 
-  return output
+  return output;
 }
 
-describe('fft', function() {
-  describe('#FFTImageDataRGBA()', function() {
-    it('transforms independent channels', function() {
-      var n = 48,
-          r = randomImageData(n),
-          g = randomImageData(n),
-          b = randomImageData(n),
-          a = new Uint8ClampedArray(n),
-          data = mergeRGBA(r, g, b, a),
-          expected = mergeComplexRGBA(DFT(r), DFT(g), DFT(b), DFT(a)),
-          output = fft_lib.FFTImageDataRGBA(data, n, 1)
+describe('fft', () => {
+  describe('#FFTImageDataRGBA()', () => {
+    it('transforms independent channels', () => {
+      const n = 48;
+      const r = randomImageData(n);
+      const g = randomImageData(n);
+      const b = randomImageData(n);
+      const a = new Uint8ClampedArray(n);
+      const data = mergeRGBA(r, g, b, a);
+      const expected = mergeComplexRGBA(DFT(r), DFT(g), DFT(b), DFT(a));
+      const output = FFTImageDataRGBA(data, n, 1);
 
-      assertComplexArraysAlmostEqual(expected, output)
-    })
+      assertComplexArraysAlmostEqual(expected, output);
+    });
 
-    xit('transforms in 2D')
-  })
-})
+    xit('transforms in 2D');
+  });
+});
 
