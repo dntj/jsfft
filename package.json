@@ -6,19 +6,24 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/dntj/jsfft.git"
+    "url": "git+https://github.com/dntj/jsfft.git"
   },
   "engines": {
     "node": "*"
   },
-
   "main": "./lib/fft",
-
   "scripts": {
     "test": "mocha"
   },
-
   "devDependencies": {
     "mocha": ">=1.1.0"
+  },
+  "bugs": {
+    "url": "https://github.com/dntj/jsfft/issues"
+  },
+  "homepage": "https://github.com/dntj/jsfft#readme",
+  "directories": {
+    "example": "example",
+    "test": "test"
   }
 }
