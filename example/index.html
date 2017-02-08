@@ -13,10 +13,10 @@
     <div class="explanation">
       Sample data
       <pre>
-var data = new ComplexArray(128)
-data.map(function(value, i, n) {
-  value.real = (i > n/3 &amp;&amp; i &lt; 2*n/3) ? 1 : 0
-})
+const data = new ComplexArray(128);
+data.map((value, i, n) => {
+  value.real = (i > n/3 &amp;&amp; i &lt; 2*n/3) ? 1 : 0;
+});
       </pre>
     </div>
   </div>
@@ -25,7 +25,7 @@ data.map(function(value, i, n) {
     <div class="explanation">
       Transform (in place):<br>
       <code>
-        data.FFT()
+        data.FFT();
       </code>
     </div>
   </div>
@@ -34,12 +34,12 @@ data.map(function(value, i, n) {
     <div class="explanation">
       Simple low pass filter:
       <pre>
-data.map(function(freq, i, n) {
+data.map((freq, i, n) => {
   if (i > n/5 &amp;&amp; i &lt; 4*n/5) {
-    freq.real = 0
-    freq.imag = 0
+    freq.real = 0;
+    freq.imag = 0;
   }
-})
+});
       </pre>
     </div>
   </div>
@@ -48,7 +48,7 @@ data.map(function(freq, i, n) {
     <div class="explanation">
       Transform back:<br>
       <code>
-        data.InvFFT()
+        data.InvFFT();
       </code>
     </div>
   </div>
@@ -57,70 +57,61 @@ data.map(function(freq, i, n) {
     <div class="explanation">
       ... or all in one step
       <pre>
-data.frequencyMap(function(freq, i, n) {
+data.frequencyMap((freq, i, n) => {
   if (i > n/5 &amp;&amp; i &lt; 4*n/5) {
-    freq.real = 0
-    freq.imag = 0
+    freq.real = 0;
+    freq.imag = 0;
   }
-})
+});
       </pre>
     </div>
   </div>
   <script>
-    !function() {
+    window.onload = function() {
       function drawToCanvas(element_id, data) {
-        var
-          element = document.getElementById(element_id)
-          canvas = document.createElement('canvas'),
-          context = canvas.getContext('2d'),
-          width = element.clientWidth,
-          height = element.clientHeight,
-          n = data.length
+        const element = document.getElementById(element_id);
+        const width = element.clientWidth;
+        const height = element.clientHeight;
+        const n = data.length;
 
-        canvas.width = width
-        canvas.height = height
-        element.appendChild(canvas)
+        const canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+        element.appendChild(canvas);
 
-        context.strokeStyle = 'blue'
-        context.beginPath()
-        data.forEach(function(c_value, i) {
-          context.lineTo(
-            i * width / n,
-            height/2 * (1.5 - c_value.real)
-          )
-        })
-        context.stroke()
+        const context = canvas.getContext('2d');
+        context.strokeStyle = 'blue';
+        context.beginPath();
+        data.forEach((c_value, i) => {
+          context.lineTo(i * width / n, height/2 * (1.5 - c_value.real));
+        });
+        context.stroke();
       }
 
-      window.onload = function() {
-        var
-          data = new complex_array.ComplexArray(128)
+      const data = new complex_array.ComplexArray(128).map((value, i, n) => {
+        value.real = (i > n/3 && i < 2*n/3) ? 1 : 0;
+      });
 
-        data.map(function(value, i, n) {
-          value.real = (i > n/3 && i < 2*n/3) ? 1 : 0
-        })
+      drawToCanvas('original', data);
 
-        drawToCanvas('original', data)
+      data.FFT();
+      drawToCanvas('fft', data);
+      data.map((freq, i, n) => {
+        if (i > n/5 && i < 4*n/5) {
+          freq.real = 0;
+          freq.imag = 0;
+        }
+      });
+      drawToCanvas('fft_filtered', data);
+      drawToCanvas('original_filtered', data.InvFFT());
 
-        data.FFT()
-        drawToCanvas('fft', data)
-        data.map(function(freq, i, n) {
-          if (i > n/5 && i < 4*n/5) {
-            freq.real = 0
-            freq.imag = 0
-          }
-        })
-        drawToCanvas('fft_filtered', data)
-        drawToCanvas('original_filtered', data.InvFFT())
-
-        drawToCanvas('all_in_one', data.frequencyMap(function(freq, i, n) {
-          if (i > n/5 && i < 4*n/5) {
-            freq.real = 0
-            freq.imag = 0
-          }
-        }))
-      }
-    }()
+      drawToCanvas('all_in_one', data.frequencyMap((freq, i, n) => {
+        if (i > n/5 && i < 4*n/5) {
+          freq.real = 0;
+          freq.imag = 0;
+        }
+      }));
+    };
   </script>
 </body>
 </html>
