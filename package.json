@@ -13,13 +13,16 @@
   },
   "main": "./lib/fft",
   "scripts": {
+    "start": "webpack-dev-server",
     "test": "mocha --compilers js:babel-register"
   },
   "devDependencies": {
     "babel-cli": "^6.22.2",
     "babel-preset-env": "^1.1.8",
     "babel-register": "^6.22.0",
-    "mocha": ">=1.1.0"
+    "mocha": ">=1.1.0",
+    "webpack": "^2.2.1",
+    "webpack-dev-server": "^2.3.0"
   },
   "bugs": {
     "url": "https://github.com/dntj/jsfft/issues"
@@ -28,5 +31,11 @@
   "directories": {
     "example": "example",
     "test": "test"
+  },
+  "dependencies": {
+    "babel-cli": "^6.22.2",
+    "babel-preset-env": "^1.1.8",
+    "babel-preset-es2015": "^6.22.0",
+    "babel-register": "^6.22.0"
   }
 }
