@@ -1,5 +1,5 @@
 import * as assert from 'assert';
-import {ComplexArray} from '../lib/complex_array';
+import ComplexArray from '../lib/complex_array';
 
 function assertArrayEquals(first, second) {
   const message = `${first} != ${second}`;

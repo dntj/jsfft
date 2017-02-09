@@ -1,5 +1,5 @@
 import * as assert from 'assert';
-import {ComplexArray} from '../lib/complex_array';
+import ComplexArray from '../lib/complex_array';
 import {FFT, InvFFT} from '../lib/fft';
 
 const EPSILON = 1e-4;

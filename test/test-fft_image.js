@@ -2,7 +2,7 @@ import '../lib/fft_image';
 import {assertComplexArraysAlmostEqual, DFT} from './test_helper';
 import * as assert from 'assert';
 import {FFTImageDataRGBA} from '../lib/fft';
-import {ComplexArray} from '../lib/complex_array';
+import ComplexArray from '../lib/complex_array';
 
 
 function randomImageData(n) {

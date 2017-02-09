@@ -1,5 +1,5 @@
 import {assertComplexArraysAlmostEqual, assertFFTMatches, assertFFTMatchesDFT} from './test_helper';
-import {ComplexArray} from '../lib/complex_array';
+import ComplexArray from '../lib/complex_array';
 
 describe('fft', () => {
   describe('#FFT()', () => {
