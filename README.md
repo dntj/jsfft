@@ -4,12 +4,13 @@ Small, efficient Javascript FFT implementation for node or the browser.
 
 ## Usage
 
-JSFFT ships with a **complex_array** and a **fft** module.
+JSFFT ships with **ComplexArray** which can be operated on:
 
 ```javascript
-const data = new complex_array.ComplexArray(512);
+const fft = require('jsfft');
+
 // Use the in-place mapper to populate the data.
-data.map((value, i, n) => {
+const data = new fft.ComplexArray(512).map((value, i, n) => {
   value.real = (i > n/3 && i < 2*n/3) ? 1 : 0;
 });
 ```
