@@ -11,6 +11,8 @@ pids
 logs
 results
 
+dist
+
 example/bundle.js
 
 node_modules
