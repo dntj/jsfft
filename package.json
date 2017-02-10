@@ -9,9 +9,9 @@
     "url": "git+https://github.com/dntj/jsfft.git"
   },
   "engines": {
-    "node": "*"
+    "node": ">=6.9.3"
   },
-  "main": "./lib/fft",
+  "main": "./dist/fft",
   "scripts": {
     "start": "webpack-dev-server",
     "build": "babel -d dist/ lib/",
@@ -35,5 +35,8 @@
     "example": "example",
     "test": "test"
   },
+  "files": [
+    "dist"
+  ],
   "dependencies": {}
 }
