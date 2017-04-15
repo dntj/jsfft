@@ -9,7 +9,7 @@
     "url": "git+https://github.com/dntj/jsfft.git"
   },
   "engines": {
-    "node": ">=6.9.3"
+    "node": ">=4.0.0"
   },
   "main": "./dist/fft",
   "scripts": {
