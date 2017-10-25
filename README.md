@@ -40,6 +40,17 @@ const filtered = data.frequencyMap((frequency, i, n) => {
 });
 ```
 
+## Conventions
+
+JSFFT uses the normalization convention that is symmetric between the forward and
+reverse transform.  With `N` data points, the transform is normalized by a factor of `√N`:
+
+```
+           1   N-1       2πik/N
+fft(k) =   -    ∑  f(j) 𝐞
+          √N   j=0
+```
+
 ## Other Implementations
 
 [DSP](https://github.com/corbanbrook/dsp.js) is a full featured Digital Signal
