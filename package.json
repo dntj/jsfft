@@ -14,7 +14,7 @@
   "main": "./dist/fft",
   "scripts": {
     "start": "webpack-dev-server",
-    "build": "babel -d dist/ lib/",
+    "build": "babel -d dist/ lib/; webpack example/index.js",
     "clean": "rm -rf dist",
     "prepublish": "npm run build",
     "test": "mocha --compilers js:babel-register"
