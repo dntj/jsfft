@@ -46,8 +46,14 @@ JSFFT uses the normalization convention that is symmetric between the forward an
 reverse transform.  With `N` data points, the transform is normalized by a factor of `√N`:
 
 ```
-           1   N-1       2πik/N
+           1   N-1       -2πik/N
 fft(k) =   -    ∑  f(j) 𝐞
+          √N   j=0
+```
+
+```
+           1   N-1       2πik/N
+ifft(k) =   -    ∑  f(j) 𝐞
           √N   j=0
 ```
 
